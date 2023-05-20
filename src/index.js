@@ -41,34 +41,33 @@ const inputHandler = event => {
     countryList.innerHTML = ' ';
     countryInfo.innerHTML = ' ';
     return;
-  } else {
-    fetchCountries(inputValue)
-      .then(data => {
-        if (data.length > 10) {
-          //jesli jest wiecej wynikow niz 10 to info i czysci ul
-          Notiflix.Notify.info(
-            'Too many matches found. Please enter a more specific name.'
-          );
-          countryList.innerHTML = ' ';
-          return;
-        } else {
-          if (data.length === 1) {
-            //jesli dokladnie 1 wynik to czysci ul i wykonuje oneResult, ktore pokazuje szczegoly
-            countryList.innerHTML = ' ';
-            countryInfo.innerHTML = oneResult(data);
-            return;
-          }
-        } //w innym wypadku tworzy liste ul krajow
-        countryList.innerHTML = createList(data);
-        countryInfo.innerHTML = ' ';
-      })
-      .catch(error => {
-        //obsluga bledu jesli nie znajdzie kraju
-        Notiflix.Notify.failure('Oops, there is no country with that name.');
-        countryInfo.innerHTML = ' ';
-        countryList.innerHTML = ' ';
-      });
   }
+  fetchCountries(inputValue)
+    .then(data => {
+      if (data.length > 10) {
+        //jesli jest wiecej wynikow niz 10 to info i czysci ul
+        Notiflix.Notify.info(
+          'Too many matches found. Please enter a more specific name.'
+        );
+        countryList.innerHTML = ' ';
+        return;
+      }
+      if (data.length === 1) {
+        //jesli dokladnie 1 wynik to czysci ul i wykonuje oneResult, ktore pokazuje szczegoly
+        countryList.innerHTML = ' ';
+        countryInfo.innerHTML = oneResult(data);
+        return;
+      }
+      //w innym wypadku tworzy liste ul krajow
+      countryList.innerHTML = createList(data);
+      countryInfo.innerHTML = ' ';
+    })
+    .catch(error => {
+      //obsluga bledu jesli nie znajdzie kraju
+      Notiflix.Notify.failure('Oops, there is no country with that name.');
+      countryInfo.innerHTML = ' ';
+      countryList.innerHTML = ' ';
+    });
 };
 //eventListenner na inpucie, debounce z lodasha z delayem
 input.addEventListener('input', debounce(inputHandler, DEBOUNCE_DELAY));
